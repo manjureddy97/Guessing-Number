@@ -24,12 +24,13 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 24,
-        fontWeight: 'bold',
+        // fontWeight: 'bold',
         color: '#ffffff',
         textAlign: 'center',
         borderWidth: 2,
         borderColor: '#ffffff',
         height: 50,
-        padding: 10
+        padding: 10,
+        fontFamily: 'open-sans-bold'
     }
 })

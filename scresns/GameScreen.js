@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, StyleSheet, SafeAreaView, Alert, Text } from 'react-native';
+import { View, StyleSheet, SafeAreaView, Alert, Text, FlatList } from 'react-native';
 import NumberContainer from '../components/game/NumberContainer';
 import PrimaryButton from '../components/ui/PrimaryButton';
 import Title from '../components/ui/Title';
@@ -9,26 +9,24 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 
+function generateRandomBetween(min, max, exclude) {
+    const randNum = Math.floor(Math.random() * (max - min)) + min;
+
+    if (randNum === exclude) {
+        return generateRandomBetween(min, max, exclude);
+    } else {
+        return randNum;
+    }
+}
+
+let minBoundary = 1;
+let maxBoundary = 100;
+
 
 function GameScreen({ userNumber, onGameOver }) {
     const initialGuess = generateRandomBetween(1, 100, userNumber)
     const [currentGuess, setCurrentGuess] = useState(initialGuess);
-
-
-
-
-    function generateRandomBetween(min, max, exclude) {
-        const randNum = Math.floor(Math.random() * (max - min)) + min;
-
-        if (randNum === exclude) {
-            return generateRandomBetween(min, max, exclude);
-        } else {
-            return randNum;
-        }
-    }
-
-    let minBoundary = 1;
-    let maxBoundary = 100;
+    const [guessRounds, setGuessRounds] = useState([initialGuess]);
 
 
     useEffect(() => {
@@ -37,7 +35,12 @@ function GameScreen({ userNumber, onGameOver }) {
 
         }
 
-    }, [currentGuess, userNumber, onGameOver])
+    }, [currentGuess, userNumber, onGameOver]);
+
+    useEffect(() => {
+        minBoundary: 1;
+        maxBoundary: 100
+    }, []);
 
     function nextGuessHandler(direction) {  // direction => lower, greate
 
@@ -66,7 +69,8 @@ function GameScreen({ userNumber, onGameOver }) {
         // console.log(maxBoundary, minBoundary);
         const newRndNumber = generateRandomBetween(minBoundary, maxBoundary, currentGuess)
 
-        setCurrentGuess(newRndNumber)
+        setCurrentGuess(newRndNumber);
+        setGuessRounds(prevGuessRounds => [newRndNumber, ...prevGuessRounds])
 
 
     }
@@ -105,7 +109,10 @@ function GameScreen({ userNumber, onGameOver }) {
                 {/* +  - */}
             </Card>
             <View>
-                <Text>LOG ROUNDS</Text>
+                {/* <Text>LOG ROUNDS</Text> */}
+                {guessRounds.map(guessRound => <Text key={guessRound}>{guessRound}</Text>)}
+
+
             </View>
         </View>
 
